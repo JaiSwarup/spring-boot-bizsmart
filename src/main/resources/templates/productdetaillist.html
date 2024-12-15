@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="POS - Bootstrap Admin Template">
+    <meta name="keywords"
+          content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
+    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Ecommerce</title>
+
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon.jpg}">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/select2/css/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/fontawesome/css/fontawesome.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/fontawesome/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+</head>
+<body>
+<div id="global-loader">
+    <div class="whirly-loader"></div>
+</div>
+
+<div class="main-wrapper">
+
+    <div th:replace="~{sidebar :: sidebar}">...</div>
+    <div th:replace="~{header :: header}">...</div>
+
+
+    <div class="page-wrapper">
+        <div class="content">
+            <div class="page-header">
+                <div class="page-title">
+                    <h4>Product Detail</h4>
+                    <h6>Manage Product Detail</h6>
+                </div>
+                <div class="page-btn">
+                    <a th:href="@{/api/productdetail/add/{id}(id=${product.getId()})}" class="btn btn-added">
+                        <img src="/assets/img/icons/plus.svg" alt="img" class="me-1">Add New ProductDetail
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-top">
+                        <div class="search-set">
+                            <div class="search-path">
+                                <a class="btn btn-filter"
+                                   id="filter_search">
+                                    <img src="/assets/img/icons/filter.svg" alt="img">
+                                    <span><img src="/assets/img/icons/closes.svg" alt="img"></span>
+                                </a>
+                            </div>
+                            <div class="search-input">
+                                <a class="btn btn-searchset"><img src="/assets/img/icons/search-white.svg" alt="img"></a>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-responsive">
+                        <table class="table  datanew">
+                            <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Color </th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Product Detail Code</th>
+                                <th>Product Detail ID</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="s : ${list}">
+                                <td th:text=" ${s.getProduct().name_Product}"></td>
+                                <td th:text=" ${s.getColor().name_Color}"></td>
+                                <td th:text=" ${s.getSize().name_Size}"></td>
+                                <td th:text=" ${s.getQuanlity_ProductDetail()}"></td>
+                                <td th:text=" ${s.getUnitPrice_ProductDetail()}"></td>
+                                <td th:text=" ${s.getCode_ProductDetail()}"></td>
+                                <td th:text=" ${s.getId()}"></td>
+                                <td th:switch="${s.getStatus_ProductDetail()}">
+                                    <span th:case="0">Inactive</span>
+                                    <span th:case="1">Active</span>
+                                    <span th:case="3">Out of Stock</span>
+                                <td>
+                                    <a class="me-3" th:href="@{/api/productdetail/edit/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/edit.svg}" alt="Edit">
+                                    </a>
+                                    <a class="me-3" th:href="@{/api/productdetail/delete/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/delete.svg}" alt="Delete">
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#sizeTable').DataTable();
+    });
+</script>
+<script th:src="@{/assets/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/assets/js/feather.min.js}"></script>
+<script th:src="@{/assets/js/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/select2/js/select2.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+<script th:src="@{/assets/js/script.js}"></script>
+<script th:src="@{/assets/js/bootstrap-datetimepicker.min.js}"></script>
+</body>
+</html>

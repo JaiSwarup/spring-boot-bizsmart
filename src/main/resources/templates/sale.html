@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="POS - Bootstrap Admin Template">
+    <meta name="keywords"
+          content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
+    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Ecommerce</title>
+
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon.jpg}">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/select2/css/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/fontawesome/css/fontawesome.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/fontawesome/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+</head>
+<body>
+<div id="global-loader">
+    <div class="whirly-loader"></div>
+</div>
+
+<div class="main-wrapper">
+
+    <div th:replace="~{sidebar :: sidebar}">...</div>
+    <div th:replace="~{header :: header}">...</div>
+
+
+    <div class="page-wrapper">
+        <div class="content">
+            <div class="page-header">
+                <div class="page-title">
+                    <h4>Pay At Counter</h4>
+                </div>
+                <!--                <div class="page-btn">-->
+                <!--                    <a th:href="@{/api/productdetail/add/{id}(id=${product.getId()})}" class="btn btn-added">-->
+                <!--                        <img src="/assets/img/icons/plus.svg" alt="img" class="me-1">Add New ProductDetail-->
+                <!--                    </a>-->
+                <!--                </div>-->
+
+            </div>
+            <!--    FORM BILL        -->
+            <div class="card">
+                <h5>Bill</h5>
+                <div class="card-body">
+                    <form th:action="@{${actionFormBill}}" th:object="${billForm}" method="post">
+                        <div class="row">
+                            <input type="hidden" th:field="*{id}" readonly/>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Bill Code</label>
+                                    <input type="text" th:field="*{code_Bill}" placeholder="Enter Bill Code">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Payment Processing Employee</label>
+                                    <select class="select" th:field="*{employee}">
+                                        <option th:each="e : ${listEmployee}" th:value="${e.id}"
+                                                th:text="${e.name_Employee}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>User</label>
+                                    <select class="select" th:field="*{user}">
+                                        <option th:each="u : ${listUser}" th:value="${u.id}"
+                                                th:text="${u.name_User}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Date Of Purchase</label>
+                                    <div class="input-groupicon">
+                                        <input th:field="*{dateOfPurchase}" type="text" class="form-control"
+                                               placeholder="Select Date">
+                                        <a class="addonset">
+                                            <img src="/assets/img/icons/calendars.svg" alt="img">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Status of Payment</label>
+                                    <select class="select" th:field="*{status}">
+                                        <option th:value="1" th:text="'Waiting For Payment'" th:selected="${billForm.status == 1}">Waiting For Payment</option>
+                                        <option th:value="0" th:text="'Payment Complete'" th:selected="${billForm.status == 0}">Payment Complete</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <button type="submit"
+                                    class="btn btn-submit me-2">Save Bill
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--END FORM BILL-->
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-top">
+                        <div class="search-set">
+                            <div class="search-path">
+                                <a class="btn btn-filter"
+                                   id="filter_search">
+                                    <img src="/assets/img/icons/filter.svg" alt="img">
+                                    <span><img src="/assets/img/icons/closes.svg" alt="img"></span>
+                                </a>
+                            </div>
+                            <div class="search-input">
+                                <a class="btn btn-searchset"><img src="/assets/img/icons/search-white.svg"
+                                                                  alt="img"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table  datanew">
+                            <thead>
+                            <tr>
+                                <th>Bill Code</th>
+                                <th>Employee</th>
+                                <th>User</th>
+                                <th>Date of Purchase</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="s : ${listBill}">
+                                <td th:text=" ${s.code_Bill}"></td>
+                                <td th:text=" ${s.getEmployee().name_Employee}"></td>
+                                <td th:text=" ${s.getUser().name_User}"></td>
+                                <td th:text=" ${s.getDateOfPurchase()}"></td>
+                                <td th:text=" ${s.getId()}"></td>
+                                <td th:switch="${s.getStatus()}">
+                                    <span th:case="1">Waiting for Payment</span>
+                                    <span th:case="0">Payment Complete</span>
+                                <td>
+                                    <a class="me-3" th:href="@{/api/bill/editbill/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/edit.svg}" alt="Edit">
+                                    </a>
+                                    <a class="me-3" th:href="@{/api/bill/delete/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/delete.svg}" alt="Delete">
+                                    </a>
+                                    <a class="me-3" th:href="@{/api/bill/detail/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/dash1.svg}" alt="Detail">
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h5>Add Bill Details</h5>
+                <div class="card-body">
+                    <form th:action="@{${actionBillDetail}}" method="post" th:object="${billDetailForm}">
+                        <div class="row">
+                            <input type="hidden" th:field="*{id}" readonly/>
+
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="billId">Bill:</label>
+                                    <select id="billId" class="select" th:field="*{bill.id}" required>
+                                        <option value="">Select Bill</option>
+                                        <th:block th:each="bill : ${listBill}">
+                                            <option th:value="${bill.id}" th:text="${bill.user.name_User}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="productId">Product:</label>
+                                    <select id="productId" class="select" th:field="*{productDetail.id}" required>
+                                        <option value="">Select Product</option>
+                                        <th:block th:each="productDetail : ${listProductDetail}">
+                                            <option th:value="${productDetail.id}"
+                                                    th:text="${productDetail.product.name_Product} + ${productDetail.size.name_Size} + ${productDetail.color.name_Color}">
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" id="quantity" class="form-control"
+                                           th:field="*{quanlity_BillDetail}" required/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="status">Status:</label>
+                                    <select id="status" class="select" th:field="*{static}" required>
+                                        <option value="1">In Stock</option>
+                                        <option value="0">Out of Stock</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn btn-submit me-2">Bill Details</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!--    Bill Detail        -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Bill Details</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive mb-3">
+                            <table class="table" id="table">
+                                <thead>
+                                <tr>
+                                    <th>Bill ID</th>
+                                    <th>Product Name</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity in Stock</th>
+                                    <th>Quantity</th>
+                                    <th>Total Sum</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="detail : ${listBillDetail}">
+
+                                    <td id="billIdentify" th:text="${detail.bill.id}"></td>
+                                    <td th:text="${detail.productDetail.product.name_Product}"></td>
+                                    <td th:text="${detail.productDetail.color.name_Color}"></td>
+                                    <td th:text="${detail.productDetail.size.name_Size}"></td>
+                                    <td class="unit-price"
+                                        th:text="${detail.productDetail.unitPrice_ProductDetail}"></td>
+                                    <td th:text="${detail.productDetail.quanlity_ProductDetail}"></td>
+                                    <td th:text="${detail.getQuanlity_BillDetail()}"></td>
+                                    <td class="total-amount" th:text="${detail.totalAmount_BillDetail}"></td>
+                                    <td>
+                                        <a class="me-3" th:href="@{/api/bill/detail/edit/{id}(id=${detail.id})}">
+                                            <img th:src="@{/assets/img/icons/edit.svg}" alt="Edit">
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Payment Button -->
+                <!-- Total Sum -->
+                <div class="row">
+                    <div class="col-lg-12 col-sm-6 col-12">
+                        <label for="totalSum">Tổng Tiền:</label>
+                        <input type="text" id="totalSum" class="form-control" readonly>
+                    </div>
+                </div>
+
+                <form id="paymentForm" action="/api/bill/detail/pay/" method="post">
+                    <input type="hidden" name="id" id="hiddenBillId" value="">
+                    <div class="row mt-3">
+                        <div class="col-lg-12 col-sm-6 col-12">
+                            <button type="submit" class="btn btn-submit">Thanh Toán</button>
+                        </div>
+                    </div>
+                </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        let totalSum = 0;
+                        const totalAmountElements = document.querySelectorAll('.total-amount');
+
+                        totalAmountElements.forEach(function (element) {
+                            totalSum += parseFloat(element.textContent || element.innerText);
+                        });
+
+                        document.getElementById('totalSum').value = totalSum.toFixed(2);
+                    });
+                </script>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const paymentForm = document.getElementById('paymentForm');
+                        const hiddenBillIdInput = document.getElementById('hiddenBillId');
+
+                        // Giả sử idBill nằm trong phần tử có id là 'billIdentify'
+                        const idBill = document.querySelector('#billIdentify').innerHTML;
+
+                        // Đặt giá trị của input ẩn
+                        hiddenBillIdInput.value = idBill;
+
+                        // Bắt sự kiện submit của form
+                        paymentForm.addEventListener('submit', function (event) {
+                            event.preventDefault(); // Ngăn chặn form gửi mặc định
+
+                            // Tạo URL mới bao gồm idBill
+                            const actionUrl = `/api/bill/detail/pay/${idBill}`;
+
+                            // Gửi yêu cầu POST đến server
+                            fetch(actionUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    id: idBill
+                                })
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // Chuyển hướng người dùng đến trang danh sách hóa đơn nếu thành công
+                                        window.location.href = '/api/bill';
+                                    } else {
+                                        // Xử lý lỗi nếu có
+                                        console.error('Failed to process payment');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                    });
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#sizeTable').DataTable();
+        console.log('tesst', document.querySelector('#billIdentify').innerHTML)
+    });
+</script>
+<script th:src="@{/assets/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/assets/js/feather.min.js}"></script>
+<script th:src="@{/assets/js/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/select2/js/select2.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+<script th:src="@{/assets/js/script.js}"></script>
+<script th:src="@{/assets/js/bootstrap-datetimepicker.min.js}"></script>
+<script>
+
+</script>
+</body>
+</html>
